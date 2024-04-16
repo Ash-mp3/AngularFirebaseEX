@@ -7,6 +7,7 @@ import { CompanyListComponent } from './company/company-list/company-list.compon
 const routes: Routes = [
     { path: 'company/all', component: CompanyListComponent },  // <-- new route
     { path: 'company/edit', component: CompanyEditComponent },
+    { path: 'company/:id', component: CompanyEditComponent },
     { path: '**', redirectTo: 'company/all' }   
 ];
 

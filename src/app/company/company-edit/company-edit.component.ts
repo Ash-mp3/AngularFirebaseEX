@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { company } from '../../models/company';
 import { CompanyService } from '../company.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-company-edit',
@@ -10,23 +11,43 @@ import { CompanyService } from '../company.service';
   styleUrls: ['./company-edit.component.css'],
 })
 export class CompanyEditComponent implements OnInit {
-  company$: Observable<company | undefined>;
+    company$: Observable<company | undefined> | undefined;
+    id: string | null;
+    isNew: boolean | undefined;
 
-  constructor(private db: AngularFirestore, private companyService: CompanyService) {
-    this.company$ = this.db.doc<company>('companies/company').valueChanges();
+  constructor(
+    private db: AngularFirestore,
+    private companyService: CompanyService,
+    private ActivatedRoute: ActivatedRoute
+  ) {
+      this.id = '';
+      this.isNew = false;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.ActivatedRoute.paramMap.subscribe((params) => {
+      this.id = params.get('id');
+    });
+      if (this.id === 'new') { 
+          this.isNew = true;
+          const newCompany = {
+              name: 'new company',
+          }
+          this.company$ = of(newCompany);
+      } else {
+          this.company$ = this.db.doc<company>(`companies/${this.id}`).valueChanges();
+      }
+  }
 
   saveCompany(company: any) {
-    this.companyService.saveCompany(company);
+    this.companyService.saveCompany(company, this.id);
   }
 
-  editCompany(company: any) {
-    this.companyService.editCompany({ phone: '123-123-1234' });
+    editCompany(company: any) {
+    this.companyService.editCompany(company, this.id);
   }
 
-  deleteCompany() {
-    this.companyService.deleteCompany();
+  deleteCompany(company: any) {
+    this.companyService.deleteCompany(company, this.id);
   }
 }
