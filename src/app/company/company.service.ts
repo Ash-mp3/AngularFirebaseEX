@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { company } from '../models/company';
-import { Observable, from, of, map } from 'rxjs';
+import { Observable, from, of, map, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {
   AngularFirestore,
@@ -13,6 +13,9 @@ import {
   providedIn: 'root',
 })
 export class CompanyService {
+    static getCompaniesObservable(): Observable<import("../models/contact").contact[]> {
+        throw new Error('Method not implemented.');
+    }
   private companyRef: AngularFirestoreDocument<company>;
   private companiesRef: AngularFirestoreCollection<company>;
 
@@ -22,43 +25,46 @@ export class CompanyService {
   }
 
   getCompaniesObservable(): Observable<company[]> {
-    return this.companiesRef.snapshotChanges().pipe(
-      map((items: DocumentChangeAction<company>[]): company[] => {
-        return items.map((item: DocumentChangeAction<company>): company => {
-          return {
-            id: item.payload.doc.id,
-            name: item.payload.doc.data().name,
-            phone: item.payload.doc.data().phone,
-          };
-        });
-      })
-    );
+    return this.companiesRef.snapshotChanges()
+      .pipe(
+        map((items: DocumentChangeAction<company>[]): company[] => {
+          return items.map((item: DocumentChangeAction<company>): company => {
+            return {
+              id: item.payload.doc.id,
+              name: item.payload.doc.data().name,
+              phone: item.payload.doc.data().phone
+            };
+          });
+        }),                           
+      );
   }
 
   getCompanyObservable(): Observable<company | any> {
     return this.companyRef.valueChanges();
   }
+    
 
   saveCompany(company: company, id: any) {
-    this.companiesRef
+   return this.companiesRef
       .add({ name: company.name })
       .then((_) => console.log('success on add'))
       .catch((error) => console.log('add', error));
   }
 
     editCompany(company: company, id: any) {
-    this.companiesRef
+    return this.companiesRef
       .doc(id)
       .update({ name: company.name })
       .then((_) => console.log('Success on update'))
       .catch((error) => console.log('update', error));
   }
 
-    deleteCompany(company: company, id: any) {
-      this.companiesRef
+    deleteCompany( id: any) {
+       return this.companiesRef
         .doc(id)
         .delete()
         .then((_) => console.log('Success on remove'))
         .catch((error) => console.log('remove', error));
-  }
+    }
+    
 }

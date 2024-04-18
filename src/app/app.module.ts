@@ -1,41 +1,49 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { environment } from '../environments/environment';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { environment} from "../environments/environment";
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CompanyEditComponent } from './company/company-edit/company-edit.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
+import { MatInputModule } from "@angular/material/input";
+import {MatCardModule} from '@angular/material/card';
 import { CompanyListComponent } from './company/company-list/company-list.component';
-import { MatIconModule } from '@angular/material/icon';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import { ContactEditComponent } from './contact/contact-edit/contact-edit.component';
+import { ContactListComponent } from './contact/contact-list/contact-list.component';
+import {MatSelectModule} from '@angular/material/select';
+
 
 @NgModule({
-  declarations: [AppComponent, CompanyEditComponent, CompanyListComponent],
+  declarations: [
+    AppComponent,
+    CompanyEditComponent,
+    CompanyListComponent,
+    ContactEditComponent,
+    ContactListComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule,    
     MatToolbarModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig), // <-- add this
+    AngularFirestoreModule, 
     FlexLayoutModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
     FormsModule,
     MatInputModule,
+    MatCardModule,
     MatIconModule,
+    MatButtonModule,
+    MatSelectModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
